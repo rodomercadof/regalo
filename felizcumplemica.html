@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para Mica</title>
     
-    <!-- Tipografías Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -315,7 +314,7 @@
 
         .letter-location-box strong { color: var(--primary-dark); font-weight: 600; }
 
-        /* --- INTERFAZ DEL SOBRE INTERACTIVO (MATEMÁTICAMENTE GEOMÉTRICO) --- */
+        /* --- INTERFAZ DEL SOBRE INTERACTIVO GEOMÉTRICO --- */
         .envelope-container {
             width: 100%;
             max-width: 380px;
@@ -328,14 +327,13 @@
             position: relative;
             width: 100%;
             height: 240px;
-            background: #ede4db; /* Fondo interior visible al abrir */
+            background: #ede4db; 
             border-radius: 12px;
             box-shadow: 0 15px 40px rgba(58, 42, 45, 0.08);
             transform-style: preserve-3d;
             transition: transform 0.5s ease;
         }
 
-        /* Solapa Superior (Flap) */
         .envelope-flap {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -347,7 +345,6 @@
             border-radius: 12px 12px 0 0;
         }
 
-        /* Solapa Izquierda */
         .envelope-left {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -357,7 +354,6 @@
             border-radius: 12px 0 0 12px;
         }
 
-        /* Solapa Derecha */
         .envelope-right {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -367,7 +363,6 @@
             border-radius: 0 12px 12px 0;
         }
 
-        /* Solapa Inferior Correcta (Soluciona el bug de solapamiento en mobile) */
         .envelope-bottom {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -377,7 +372,6 @@
             border-radius: 0 0 12px 12px;
         }
 
-        /* Sello de Lacre Centrado de Forma Absoluta */
         .envelope-seal {
             position: absolute;
             top: 50%;
@@ -404,7 +398,7 @@
             opacity: 0;
         }
 
-        /* --- FOTOS POLAROID PREMIUM --- */
+        /* --- FOTOS POLAROID PREMIUM (SOPORTE PARA 3 IMÁGENES) --- */
         .polaroid {
             position: absolute;
             background: #ffffff;
@@ -413,7 +407,7 @@
             border-radius: 2px;
             width: 140px;
             opacity: 0;
-            z-index: 6; 
+            z-index: 6; /* Flotan siempre encima de la carta */
             transform: scale(0.6) translateY(50px);
             transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
             border: 1px solid #f2ede4;
@@ -424,21 +418,34 @@
             height: 125px;
             object-fit: cover;
             display: block;
+            background: #eaeaea;
         }
 
-        .polaroid-1 { left: -40px; top: -30px; }
-        .polaroid-2 { right: -30px; bottom: -30px; }
+        /* Posiciones en Computadora */
+        .polaroid-1 { left: -60px; top: -40px; }       /* Arriba Izquierda */
+        .polaroid-2 { left: -50px; bottom: 40px; }     /* Abajo Izquierda */
+        .polaroid-3 { right: -50px; bottom: -30px; }    /* Abajo Derecha */
 
-        .show-polaroids .polaroid-1 { opacity: 1; transform: scale(1) rotate(-8deg); }
+        /* Animaciones individuales de rotación orgánica al revelarse */
+        .show-polaroids .polaroid-1 { opacity: 1; transform: scale(1) rotate(-10deg); }
         .show-polaroids .polaroid-2 { opacity: 1; transform: scale(1) rotate(6deg); }
+        .show-polaroids .polaroid-3 { opacity: 1; transform: scale(1) rotate(-8deg); }
 
+        /* Adaptación Responsiva Crítica para Mobile (Evita colisiones táctiles) */
         @media (max-width: 480px) {
             .envelope-container { max-width: 300px; }
             .envelope { height: 190px; }
-            .polaroid { width: 105px; padding: 8px 8px 20px 8px; }
+            
+            .polaroid {
+                width: 105px;
+                padding: 8px 8px 20px 8px;
+            }
             .polaroid img { height: 95px; }
-            .polaroid-1 { left: -15px; top: -45px; }
-            .polaroid-2 { right: -15px; bottom: -35px; }
+            
+            /* Distribución perimetral limpia en celulares */
+            .polaroid-1 { left: -15px; top: -55px; }
+            .polaroid-2 { left: -15px; bottom: -35px; }
+            .polaroid-3 { right: -15px; bottom: -45px; }
         }
 
         .premium-icon {
@@ -464,7 +471,6 @@
 
     <div class="wrapper">
         
-        <!-- PANTALLA 1: Bienvenida -->
         <div id="screen-1">
             <svg class="premium-icon header-icon" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
             <h1>¡Feliz cumple <em>Mica</em>!</h1>
@@ -472,7 +478,6 @@
             <button class="btn-start" onclick="goToScreen(2)">Abrir regalo</button>
         </div>
 
-        <!-- PANTALLA 2: Elección Inicial -->
         <div id="screen-2" class="hidden">
             <h1>Dos regalos secretos...</h1>
             <div class="subtitle">Hay una sola regla estricta: <strong>debés seleccionar solo uno</strong>. Elegí la caja que prefieras:</div>
@@ -498,7 +503,6 @@
             </div>
         </div>
 
-        <!-- PANTALLA 3: Primer Regalo Revelado -->
         <div id="screen-3" class="hidden">
             <div class="letter-scene">
                 <div class="birthday-card animate-card">
@@ -514,10 +518,9 @@
             </div>
         </div>
 
-        <!-- PANTALLA 4: El Regalo Restante -->
         <div id="screen-4" class="hidden">
             <h1>El secreto continúa...</h1>
-            <div class="subtitle">Ya te conozco y sé que te quedaste con la intriga de saber qué hay en la otra caja. Como es tu cumpleaños, te invito a que abras el otro regalo también:</div>
+            <div class="subtitle">Ya te conozco y sé que te quedaste con la intriga de qué hay en la otra caja. Como es tu cumpleaños, te invito a que abras el otro regalo también:</div>
             
             <div class="zone-3d">
                 <div class="gift-box-anchor hidden" id="anchor-rem-1" onclick="unboxSecondGift(1)">
@@ -540,7 +543,6 @@
             </div>
         </div>
 
-        <!-- PANTALLA 5: Segundo Regalo Revelado -->
         <div id="screen-5" class="hidden">
             <div class="letter-scene">
                 <div class="birthday-card animate-card">
@@ -556,7 +558,6 @@
             </div>
         </div>
 
-        <!-- PANTALLA 6: Sobre Interactivo Centrado Perfecto -->
         <div id="screen-6" class="hidden">
             
             <div id="envelope-view">
@@ -576,25 +577,28 @@
                 </div>
             </div>
 
-            <!-- Destino Final: Carta + Fotos -->
             <div id="final-letter-view" class="hidden">
                 <div class="letter-scene" id="polaroids-wrapper">
                     
                     <div class="polaroid polaroid-1">
-                        <img src="https://picsum.photos/300/300?random=1" alt="Recuerdo 1">
+                        <img src="VideoCapture_20260123-092649 (1).jpg" alt="Mica Recuerdo 1">
+                    </div>
+
+                    <div class="polaroid polaroid-2">
+                        <img src="IMG-20260418-WA0046.jpg" alt="Mica Recuerdo 2">
                     </div>
 
                     <div class="birthday-card" id="target-final-card">
                         <svg class="premium-icon" style="color:#cd8b8b; width:30px; height:30px; margin-bottom:15px; fill: rgba(205,139,139,0.06);" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                        <div class="letter-tag"></div>
+                        <div class="letter-tag">De: Rodo</div>
                         <div class="letter-body-text">
                             ¡Feliz cumpleaños de nuevo! Espero que lo disfrutes y que logres ser feliz la mayor cantidad del tiempo posible.
                         </div>
                         <span class="letter-signature">Te quiero mucho, Rodo.</span>
                     </div>
 
-                    <div class="polaroid polaroid-2">
-                        <img src="https://picsum.photos/300/300?random=2" alt="Recuerdo 2">
+                    <div class="polaroid polaroid-3">
+                        <img src="IMG-20251203-WA0004.jpg" alt="Mica Recuerdo 3">
                     </div>
 
                 </div>
@@ -629,7 +633,7 @@
                 const cordobaBlock = document.getElementById('cordoba-location-text');
 
                 if (boxId === 1) {
-                    giftTitle.innerHTML = "Una pistola masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>💆‍♀️</span>";
+                    giftTitle.innerHTML = "La Pistola Masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>⚡</span>";
                     cordobaBlock.classList.add('hidden');
                 } else {
                     giftTitle.innerHTML = "Una Cita en un Lugar Misterioso <span style='font-size:1.4rem; color:#c5a06b;'>✨</span>";
@@ -660,7 +664,7 @@
                     secondTitle.innerHTML = "Una Cita en un Lugar Misterioso <span style='font-size:1.4rem; color:#c5a06b;'>✨</span>";
                     secondCordoba.classList.remove('hidden');
                 } else {
-                    secondTitle.innerHTML = "Una pistola masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>💆‍♀️</span>";
+                    secondTitle.innerHTML = "La Pistola Masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>⚡</span>";
                     secondCordoba.classList.add('hidden');
                 }
             }, 750);
@@ -711,3 +715,4 @@
     </script>
 </body>
 </html>
+
