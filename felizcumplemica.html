@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Mica</title>
+    
+    <!-- Tipografías Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #faf7f5 0%, #f3edf7 100%);
+            --primary-rose: #e5a9a9;
+            --primary-dark: #3a2a2d;
+            --ribbon-gold: linear-gradient(45deg, #e3c496, #c5a06b);
+            --text-dark: #2d2527;
+            
+            /* Escala de las cajas 3D */
+            --box-w: 120px;
+            --box-h: 110px;
+            --box-half: 60px;
+            --lid-w: 126px;
+            --lid-offset: -3px;
+            --lid-z: 63px;
+            --gap: 110px;
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --box-w: 95px;
+                --box-h: 85px;
+                --box-half: 47.5px;
+                --lid-w: 101px;
+                --lid-offset: -3px;
+                --lid-z: 49px;
+                --gap: 50px;
+            }
+            h1 { font-size: 2.5rem !important; }
+            .subtitle { font-size: 0.95rem !important; margin-bottom: 25px !important; }
+            .birthday-card { padding: 45px 22px !important; }
+            .letter-title { font-size: 1.9rem !important; }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 24px;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 550px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            color: var(--primary-dark);
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 18px;
+            line-height: 1.2;
+        }
+
+        h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: #cd8b8b;
+        }
+
+        .subtitle {
+            color: #7a6b6d;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 45px;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-start {
+            background: var(--primary-dark);
+            color: #ffffff;
+            border: none;
+            padding: 16px 48px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 100px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(58, 42, 45, 0.12);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            letter-spacing: 1px;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            background: #543f43;
+            box-shadow: 0 15px 35px rgba(58, 42, 45, 0.2);
+        }
+
+        .hidden { display: none !important; opacity: 0; }
+
+        /* --- ESCENARIO DE CAJAS 3D --- */
+        .zone-3d {
+            display: flex;
+            justify-content: center;
+            gap: var(--gap);
+            margin: 60px 0;
+            perspective: 1000px;
+        }
+
+        .gift-box-anchor {
+            width: var(--box-w);
+            height: var(--box-h);
+            position: relative;
+        }
+
+        .cube-3d {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transform: rotateX(-18deg) rotateY(38deg);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        @media (hover: hover) {
+            .gift-box-anchor:hover .cube-3d {
+                transform: rotateX(-12deg) rotateY(50deg) translateY(-8px);
+            }
+        }
+
+        .face {
+            position: absolute;
+            width: var(--box-w);
+            height: var(--box-h);
+            background: linear-gradient(135deg, #f3c1c1 0%, var(--primary-rose) 100%);
+            outline: 1px solid transparent; 
+        }
+
+        .face::before {
+            content: '';
+            position: absolute;
+            background: var(--ribbon-gold);
+            top: 0; left: 50%; width: 18px; height: 100%;
+            transform: translateX(-50%);
+        }
+
+        .f-front  { transform: rotateY(0deg) translateZ(var(--box-half)); background: linear-gradient(135deg, #f5c6c6, var(--primary-rose)); }
+        .f-left   { transform: rotateY(-90deg) translateZ(var(--box-half)); background: linear-gradient(135deg, var(--primary-rose), #d49393); }
+        .f-right  { transform: rotateY(90deg) translateZ(var(--box-half)); background: linear-gradient(135deg, #f5c6c6, var(--primary-rose)); }
+        .f-back   { transform: rotateY(180deg) translateZ(var(--box-half)); background: #d49393; }
+        .f-bottom { transform: rotateX(-90deg) translateZ(var(--box-half)); background: #bc7f7f; box-shadow: 0 20px 40px rgba(58, 42, 45, 0.15); }
+
+        .f-top {
+            position: absolute;
+            width: var(--lid-w);
+            height: var(--lid-w);
+            background: linear-gradient(135deg, #fcd3d3, #e5a9a9);
+            top: var(--lid-offset); left: var(--lid-offset);
+            transform: rotateX(90deg) translateZ(var(--lid-z));
+            transform-style: preserve-3d;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.3);
+            transition: all 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        
+        .f-top::before {
+            content: '';
+            position: absolute;
+            background: var(--ribbon-gold);
+            top: 0; left: 50%; width: 20px; height: 100%;
+            transform: translateX(-50%);
+        }
+        .f-top::after {
+            content: '';
+            position: absolute;
+            background: var(--ribbon-gold);
+            top: 50%; left: 0; width: 100%; height: 20px;
+            transform: translateY(-50%);
+        }
+
+        .bow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) translateZ(2px);
+            z-index: 10;
+            width: 50px; height: 50px;
+        }
+        .bow-knot {
+            position: absolute;
+            width: 14px; height: 14px;
+            background: #cc9f62;
+            border-radius: 3px;
+            top: 18px; left: 18px;
+        }
+        .bow-loop {
+            position: absolute;
+            width: 26px; height: 18px;
+            border: 4px solid #ebd2b0;
+            background: #c5a06b;
+            border-radius: 50%;
+            top: 16px;
+        }
+        .bow-loop.left { left: -2px; transform: rotate(-25deg); transform-origin: right center; }
+        .bow-loop.right { right: -2px; transform: rotate(25deg); transform-origin: left center; }
+
+        .cube-3d.open-animation {
+            transform: rotateX(30deg) rotateY(120deg) scale(0.3);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        .cube-3d.open-animation .f-top {
+            transform: rotateX(90deg) translateZ(300px) rotateY(60deg) scale(0.1);
+            opacity: 0;
+        }
+
+        /* --- TARJETA DE PAPEL --- */
+        .letter-scene {
+            perspective: 1200px;
+            margin-top: 10px;
+            width: 100%;
+            position: relative;
+        }
+
+        .birthday-card {
+            background: #fcfbfa; 
+            border: 1px solid #eaddce;
+            padding: 65px 45px;
+            border-radius: 20px; 
+            box-shadow: 0 30px 70px rgba(58, 42, 45, 0.06);
+            transform: rotateX(6deg);
+            opacity: 0;
+            position: relative;
+            z-index: 5;
+        }
+
+        .birthday-card.animate-card {
+            animation: emergePaper 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .birthday-card::after {
+            content: '';
+            position: absolute;
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid rgba(197, 160, 107, 0.15);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .letter-tag {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #bfa37a;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .letter-title {
+            font-family: 'Fraunces', serif;
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            font-weight: 300;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+
+        .letter-body-text {
+            font-size: 1.18rem;
+            line-height: 1.9;
+            color: #4f4244;
+            font-weight: 300;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .letter-signature {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 2.2rem;
+            color: #b07272;
+            margin-top: 35px;
+            display: block;
+        }
+
+        .letter-location-box {
+            font-size: 1.05rem;
+            font-weight: 400;
+            line-height: 1.8;
+            color: #615355;
+            border-top: 1px dashed rgba(197, 160, 107, 0.25);
+            padding-top: 25px;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .letter-location-box strong { color: var(--primary-dark); font-weight: 600; }
+
+        /* --- INTERFAZ DEL SOBRE INTERACTIVO (MATEMÁTICAMENTE GEOMÉTRICO) --- */
+        .envelope-container {
+            width: 100%;
+            max-width: 380px;
+            margin: 40px auto;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            background: #ede4db; /* Fondo interior visible al abrir */
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(58, 42, 45, 0.08);
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        /* Solapa Superior (Flap) */
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #e6dacb;
+            clip-path: polygon(0 0, 50% 50%, 100% 0);
+            transform-origin: top center;
+            z-index: 4;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            border-radius: 12px 12px 0 0;
+        }
+
+        /* Solapa Izquierda */
+        .envelope-left {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fdfaf7;
+            clip-path: polygon(0 0, 50% 50%, 0 100%);
+            z-index: 2;
+            border-radius: 12px 0 0 12px;
+        }
+
+        /* Solapa Derecha */
+        .envelope-right {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #fdfaf7;
+            clip-path: polygon(100% 0, 50% 50%, 100% 100%);
+            z-index: 2;
+            border-radius: 0 12px 12px 0;
+        }
+
+        /* Solapa Inferior Correcta (Soluciona el bug de solapamiento en mobile) */
+        .envelope-bottom {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #f5eee7;
+            clip-path: polygon(0 100%, 50% 50%, 100% 100%);
+            z-index: 3;
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Sello de Lacre Centrado de Forma Absoluta */
+        .envelope-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 46px; height: 46px;
+            background: linear-gradient(135deg, #e3c496, #c5a06b);
+            border-radius: 50%;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(197, 160, 107, 0.3);
+            transition: all 0.4s ease;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        .envelope.open .envelope-seal {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+
+        /* --- FOTOS POLAROID PREMIUM --- */
+        .polaroid {
+            position: absolute;
+            background: #ffffff;
+            padding: 12px 12px 28px 12px;
+            box-shadow: 0 15px 35px rgba(58, 42, 45, 0.12);
+            border-radius: 2px;
+            width: 140px;
+            opacity: 0;
+            z-index: 6; 
+            transform: scale(0.6) translateY(50px);
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+            border: 1px solid #f2ede4;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 125px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .polaroid-1 { left: -40px; top: -30px; }
+        .polaroid-2 { right: -30px; bottom: -30px; }
+
+        .show-polaroids .polaroid-1 { opacity: 1; transform: scale(1) rotate(-8deg); }
+        .show-polaroids .polaroid-2 { opacity: 1; transform: scale(1) rotate(6deg); }
+
+        @media (max-width: 480px) {
+            .envelope-container { max-width: 300px; }
+            .envelope { height: 190px; }
+            .polaroid { width: 105px; padding: 8px 8px 20px 8px; }
+            .polaroid img { height: 95px; }
+            .polaroid-1 { left: -15px; top: -45px; }
+            .polaroid-2 { right: -15px; bottom: -35px; }
+        }
+
+        .premium-icon {
+            width: 24px; height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .header-icon { color: #e5a9a9; width: 40px; height: 40px; margin-bottom: 10px; }
+        @keyframes emergePaper {
+            0% { transform: scale(0.93) translateY(60px) rotateX(15deg); opacity: 0; }
+            100% { transform: scale(1) translateY(0) rotateX(6deg); opacity: 1; }
+        }
+        .confetti-dot { position: absolute; z-index: 10; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        
+        <!-- PANTALLA 1: Bienvenida -->
+        <div id="screen-1">
+            <svg class="premium-icon header-icon" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M14 12a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <h1>¡Feliz cumple <em>Mica</em>!</h1>
+            <div class="subtitle">Hoy es tu día y preparé algo especial para vos. ¿Te animás a descubrir qué es?</div>
+            <button class="btn-start" onclick="goToScreen(2)">Abrir regalo</button>
+        </div>
+
+        <!-- PANTALLA 2: Elección Inicial -->
+        <div id="screen-2" class="hidden">
+            <h1>Dos regalos secretos...</h1>
+            <div class="subtitle">Hay una sola regla estricta: <strong>debés seleccionar solo uno</strong>. Elegí la caja que prefieras:</div>
+            
+            <div class="zone-3d">
+                <div class="gift-box-anchor" onclick="unboxFirstGift(1)">
+                    <div class="cube-3d" id="box-1">
+                        <div class="face f-front"></div><div class="face f-left"></div><div class="face f-right"></div><div class="face f-back"></div><div class="face f-bottom"></div>
+                        <div class="f-top">
+                            <div class="bow"><div class="bow-loop left"></div><div class="bow-loop right"></div><div class="bow-knot"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gift-box-anchor" onclick="unboxFirstGift(2)">
+                    <div class="cube-3d" id="box-2">
+                        <div class="face f-front"></div><div class="face f-left"></div><div class="face f-right"></div><div class="face f-back"></div><div class="face f-bottom"></div>
+                        <div class="f-top">
+                            <div class="bow"><div class="bow-loop left"></div><div class="bow-loop right"></div><div class="bow-knot"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 3: Primer Regalo Revelado -->
+        <div id="screen-3" class="hidden">
+            <div class="letter-scene">
+                <div class="birthday-card animate-card">
+                    <div class="letter-tag">Obsequio Seleccionado</div>
+                    <div class="letter-title" id="gift-resolved-name"></div>
+                    <div id="cordoba-location-text" class="letter-location-box hidden">
+                        <svg class="premium-icon" style="color:#cd8b8b;" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span>Solo te tenés que reservar <strong>1 día que vengas a Nueva Córdoba</strong> así vamos.</span>
+                    </div>
+                    
+                    <button class="btn-start" style="margin-top: 35px; padding: 14px 40px; font-size: 0.9rem;" onclick="goToIntrigue()">Siguiente</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 4: El Regalo Restante -->
+        <div id="screen-4" class="hidden">
+            <h1>El secreto continúa...</h1>
+            <div class="subtitle">Ya te conozco y sé que te quedaste con la intriga de saber qué hay en la otra caja. Como es tu cumpleaños, te invito a que abras el otro regalo también:</div>
+            
+            <div class="zone-3d">
+                <div class="gift-box-anchor hidden" id="anchor-rem-1" onclick="unboxSecondGift(1)">
+                    <div class="cube-3d" id="box-rem-1">
+                        <div class="face f-front"></div><div class="face f-left"></div><div class="face f-right"></div><div class="face f-back"></div><div class="face f-bottom"></div>
+                        <div class="f-top">
+                            <div class="bow"><div class="bow-loop left"></div><div class="bow-loop right"></div><div class="bow-knot"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gift-box-anchor hidden" id="anchor-rem-2" onclick="unboxSecondGift(2)">
+                    <div class="cube-3d" id="box-rem-2">
+                        <div class="face f-front"></div><div class="face f-left"></div><div class="face f-right"></div><div class="face f-back"></div><div class="face f-bottom"></div>
+                        <div class="f-top">
+                            <div class="bow"><div class="bow-loop left"></div><div class="bow-loop right"></div><div class="bow-knot"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 5: Segundo Regalo Revelado -->
+        <div id="screen-5" class="hidden">
+            <div class="letter-scene">
+                <div class="birthday-card animate-card">
+                    <div class="letter-tag">El Segundo Obsequio</div>
+                    <div class="letter-title" id="second-gift-resolved-name"></div>
+                    <div id="second-cordoba-text" class="letter-location-box hidden">
+                        <svg class="premium-icon" style="color:#cd8b8b;" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span>Solo te tenés que reservar <strong>1 día que vengas a Nueva Córdoba</strong> así vamos.</span>
+                    </div>
+                    
+                    <button class="btn-start" style="margin-top: 35px; padding: 14px 40px; font-size: 0.9rem;" onclick="goToScreen(6)">Siguiente</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 6: Sobre Interactivo Centrado Perfecto -->
+        <div id="screen-6" class="hidden">
+            
+            <div id="envelope-view">
+                <h1 style="font-size: 2.5rem; margin-bottom: 10px;">Un último detalle...</h1>
+                <div class="subtitle" style="margin-bottom: 20px;">Presioná el sobre para abrirlo.</div>
+                
+                <div class="envelope-container" onclick="openEnvelopeAnimation()">
+                    <div class="envelope" id="physical-envelope">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-left"></div>
+                        <div class="envelope-right"></div>
+                        <div class="envelope-bottom"></div>
+                        <div class="envelope-seal">
+                            <svg class="premium-icon" style="width:20px; height:20px;" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Destino Final: Carta + Fotos -->
+            <div id="final-letter-view" class="hidden">
+                <div class="letter-scene" id="polaroids-wrapper">
+                    
+                    <div class="polaroid polaroid-1">
+                        <img src="https://picsum.photos/300/300?random=1" alt="Recuerdo 1">
+                    </div>
+
+                    <div class="birthday-card" id="target-final-card">
+                        <svg class="premium-icon" style="color:#cd8b8b; width:30px; height:30px; margin-bottom:15px; fill: rgba(205,139,139,0.06);" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        <div class="letter-tag"></div>
+                        <div class="letter-body-text">
+                            ¡Feliz cumpleaños de nuevo! Espero que lo disfrutes y que logres ser feliz la mayor cantidad del tiempo posible.
+                        </div>
+                        <span class="letter-signature">Te quiero mucho, Rodo.</span>
+                    </div>
+
+                    <div class="polaroid polaroid-2">
+                        <img src="https://picsum.photos/300/300?random=2" alt="Recuerdo 2">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let firstChoice = 0;
+
+        function goToScreen(num) {
+            document.getElementById('screen-1').classList.add('hidden');
+            document.getElementById('screen-2').classList.add('hidden');
+            document.getElementById('screen-3').classList.add('hidden');
+            document.getElementById('screen-4').classList.add('hidden');
+            document.getElementById('screen-5').classList.add('hidden');
+            document.getElementById('screen-6').classList.add('hidden');
+            
+            document.getElementById(`screen-${num}`).classList.remove('hidden');
+        }
+
+        function unboxFirstGift(boxId) {
+            firstChoice = boxId;
+            document.getElementById(`box-${boxId}`).classList.add('open-animation');
+            burstPremiumConfetti();
+
+            setTimeout(() => {
+                goToScreen(3);
+                const giftTitle = document.getElementById('gift-resolved-name');
+                const cordobaBlock = document.getElementById('cordoba-location-text');
+
+                if (boxId === 1) {
+                    giftTitle.innerHTML = "Una pistola masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>💆‍♀️</span>";
+                    cordobaBlock.classList.add('hidden');
+                } else {
+                    giftTitle.innerHTML = "Una Cita en un Lugar Misterioso <span style='font-size:1.4rem; color:#c5a06b;'>✨</span>";
+                    cordobaBlock.classList.remove('hidden'); 
+                }
+            }, 750);
+        }
+
+        function goToIntrigue() {
+            goToScreen(4);
+            if (firstChoice === 1) {
+                document.getElementById('anchor-rem-2').classList.remove('hidden');
+            } else {
+                document.getElementById('anchor-rem-1').classList.remove('hidden');
+            }
+        }
+
+        function unboxSecondGift(boxId) {
+            document.getElementById(`box-rem-${boxId}`).classList.add('open-animation');
+            burstPremiumConfetti();
+
+            setTimeout(() => {
+                goToScreen(5);
+                const secondTitle = document.getElementById('second-gift-resolved-name');
+                const secondCordoba = document.getElementById('second-cordoba-text');
+
+                if (boxId === 2) {
+                    secondTitle.innerHTML = "Una Cita en un Lugar Misterioso <span style='font-size:1.4rem; color:#c5a06b;'>✨</span>";
+                    secondCordoba.classList.remove('hidden');
+                } else {
+                    secondTitle.innerHTML = "Una pistola masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>💆‍♀️</span>";
+                    secondCordoba.classList.add('hidden');
+                }
+            }, 750);
+        }
+
+        function openEnvelopeAnimation() {
+            const envelope = document.getElementById('physical-envelope');
+            envelope.classList.add('open');
+
+            setTimeout(() => {
+                document.getElementById('envelope-view').classList.add('hidden');
+                document.getElementById('final-letter-view').classList.remove('hidden');
+                
+                document.getElementById('target-final-card').classList.add('animate-card');
+                document.getElementById('polaroids-wrapper').classList.add('show-polaroids');
+                
+                burstPremiumConfetti();
+            }, 700);
+        }
+
+        function burstPremiumConfetti() {
+            const colors = ['#e5a9a9', '#ebd2b0', '#c5a06b', '#dfb2b2', '#ffffff'];
+            for (let i = 0; i < 50; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'confetti-dot';
+                dot.style.background = colors[Math.floor(Math.random() * colors.length)];
+                dot.style.left = Math.random() * 100 + 'vw';
+                dot.style.top = '100vh';
+                
+                const size = Math.random() * (10 - 4) + 4;
+                dot.style.width = size + 'px';
+                dot.style.height = size + 'px';
+                dot.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+
+                document.body.appendChild(dot);
+
+                dot.animate([
+                    { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                    { transform: `translate(${Math.random() * 140 - 70}px, -115vh) rotate(${Math.random() * 720}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * (3200 - 1800) + 1800,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.2, 1)'
+                });
+
+                setTimeout(() => dot.remove(), 3200);
+            }
+        }
+    </script>
+</body>
+</html>
