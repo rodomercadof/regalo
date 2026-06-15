@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para Mica</title>
     
-    <!-- Tipografías Premium -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -26,6 +25,10 @@
             --lid-offset: -3px;
             --lid-z: 63px;
             --gap: 110px;
+
+            /* Escala de Fotos (Desktop) */
+            --p-w: 135px;
+            --p-h: 120px;
         }
 
         @media (max-width: 480px) {
@@ -37,6 +40,10 @@
                 --lid-offset: -3px;
                 --lid-z: 49px;
                 --gap: 50px;
+
+                /* Escala de Fotos proporcional para pantallas de Celulares */
+                --p-w: 92px;
+                --p-h: 85px;
             }
             h1 { font-size: 2.5rem !important; }
             .subtitle { font-size: 0.95rem !important; margin-bottom: 25px !important; }
@@ -247,7 +254,7 @@
             transform: rotateX(6deg);
             opacity: 0;
             position: relative;
-            z-index: 5;
+            z-index: 5; /* Queda de fondo, permitiendo que las fotos floten arriba */
         }
 
         .birthday-card.animate-card {
@@ -399,67 +406,82 @@
             opacity: 0;
         }
 
-        /* --- FOTOS POLAROID PREMIUM (SOPORTE PARA 6 IMÁGENES) --- */
+        /* --- ARQUITECTURA DE CONTENEDORES PARA COMPOSICIÓN SCRAPBOOK --- */
+        .scrapbook-scene {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Filas de fotos */
+        .photo-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: 16px;
+            position: relative;
+            z-index: 6; /* Flotan elegantemente sobre los márgenes de la carta */
+        }
+
+        /* Superposición milimétrica controlada */
+        .top-row {
+            margin-bottom: -45px; /* Avanza sobre el espacio vacío superior de la carta */
+        }
+        .bottom-row {
+            margin-top: -35px; /* Avanza sobre el espacio vacío inferior de la carta */
+        }
+
         .polaroid {
-            position: absolute;
             background: #ffffff;
             padding: 10px 10px 24px 10px;
-            box-shadow: 0 12px 30px rgba(58, 42, 45, 0.12);
+            box-shadow: 0 10px 25px rgba(58, 42, 45, 0.1);
             border-radius: 2px;
-            width: 135px;
+            width: var(--p-w);
             opacity: 0;
-            z-index: 6; /* Flotan armónicamente por encima de los bordes de la carta */
-            transform: scale(0.6) translateY(50px);
+            transform: scale(0.7) translateY(40px);
             transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
             border: 1px solid #f2ede4;
         }
 
         .polaroid img {
             width: 100%;
-            height: 120px;
+            height: var(--p-h);
             object-fit: cover;
             display: block;
-            background: #eaeaea;
         }
 
-        /* Distribución en Computadora (3 a la izquierda, 3 a la derecha) */
-        .polaroid-1 { left: -140px; top: -40px; }       /* Superior Izquierda */
-        .polaroid-4 { right: -140px; top: -30px; }      /* Superior Derecha */
-        
-        .polaroid-2 { left: -150px; top: 160px; }       /* Central Izquierda */
-        .polaroid-5 { right: -150px; top: 180px; }      /* Central Derecha */
-        
-        .polaroid-6 { left: -130px; bottom: -50px; }    /* Inferior Izquierda */
-        .polaroid-3 { right: -130px; bottom: -40px; }    /* Inferior Derecha */
+        /* Revelación coordinada al abrir el sobre */
+        .show-polaroids .polaroid {
+            opacity: 1;
+        }
 
-        /* Animaciones individuales de inclinación para look analógico */
-        .show-polaroids .polaroid-1 { opacity: 1; transform: scale(1) rotate(-10deg); }
-        .show-polaroids .polaroid-4 { opacity: 1; transform: scale(1) rotate(11deg); }
-        .show-polaroids .polaroid-2 { opacity: 1; transform: scale(1) rotate(7deg); }
-        .show-polaroids .polaroid-5 { opacity: 1; transform: scale(1) rotate(-8deg); }
-        .show-polaroids .polaroid-6 { opacity: 1; transform: scale(1) rotate(-12deg); }
-        .show-polaroids .polaroid-3 { opacity: 1; transform: scale(1) rotate(6deg); }
+        /* Ángulos y desfases manuales para lograr la esencia orgánica de collage */
+        .show-polaroids .polaroid-1 { transform: scale(1) rotate(-6deg) translateY(12px); }
+        .show-polaroids .polaroid-4 { transform: scale(1) rotate(5deg) translateY(-4px); }
+        .show-polaroids .polaroid-2 { transform: scale(1) rotate(-3deg) translateY(16px); }
+        
+        .show-polaroids .polaroid-5 { transform: scale(1) rotate(6deg) translateY(-12px); }
+        .show-polaroids .polaroid-6 { transform: scale(1) rotate(-4deg) translateY(4px); }
+        .show-polaroids .polaroid-3 { transform: scale(1) rotate(7deg) translateY(-8px); }
 
-        /* Adaptación de Escala Crítica para Mobile */
+        /* Ajustes Mobile Finos: Reducción de gaps y overlaps para un calce perfecto */
         @media (max-width: 480px) {
-            .envelope-container { max-width: 300px; }
-            .envelope { height: 190px; }
+            .photo-row { gap: 8px; }
+            .top-row { margin-bottom: -30px; }
+            .bottom-row { margin-top: -25px; }
+            .polaroid { padding: 6px 6px 16px 6px; }
             
-            .polaroid {
-                width: 100px;
-                padding: 8px 8px 18px 8px;
-            }
-            .polaroid img { height: 90px; }
+            /* Suavizado de rotaciones en pantallas chicas para limpieza visual */
+            .show-polaroids .polaroid-1 { transform: scale(1) rotate(-4deg) translateY(6px); }
+            .show-polaroids .polaroid-4 { transform: scale(1) rotate(3deg) translateY(-2px); }
+            .show-polaroids .polaroid-2 { transform: scale(1) rotate(-2deg) translateY(8px); }
             
-            /* Distribución escalonada para que se luzcan en el celular sin tapar el texto */
-            .polaroid-1 { left: -15px; top: -65px; }
-            .polaroid-4 { right: -15px; top: -55px; }
-            
-            .polaroid-2 { left: -35px; top: 135px; }
-            .polaroid-5 { right: -35px; top: 165px; }
-            
-            .polaroid-6 { left: -15px; bottom: -55px; }
-            .polaroid-3 { right: -15px; bottom: -45px; }
+            .show-polaroids .polaroid-5 { transform: scale(1) rotate(4deg) translateY(-6px); }
+            .show-polaroids .polaroid-6 { transform: scale(1) rotate(-3deg) translateY(2px); }
+            .show-polaroids .polaroid-3 { transform: scale(1) rotate(5deg) translateY(-4px); }
         }
 
         .premium-icon {
@@ -494,7 +516,7 @@
 
         <div id="screen-2" class="hidden">
             <h1>Tenés 2 regalos...</h1>
-            <div class="subtitle">Hay una sola regla estricta: <strong>debés seleccionar solo uno</strong>. Elegí la caja que prefieras:</div>
+            <div class="subtitle">Hay una sola condición: <strong>debés seleccionar solo uno</strong>. Elegí la caja que prefieras:</div>
             
             <div class="zone-3d">
                 <div class="gift-box-anchor" onclick="unboxFirstGift(1)">
@@ -592,46 +614,38 @@
             </div>
 
             <div id="final-letter-view" class="hidden">
-                <div class="letter-scene" id="polaroids-wrapper">
+                <div class="scrapbook-scene" id="polaroids-wrapper">
                     
-                    <!-- FOTO 1: Arriba Izquierda -->
-                    <div class="polaroid polaroid-1">
-                        <img src="VideoCapture_20260123-092649 (1).jpg" alt="Mica Recuerdo 1">
+                    <div class="photo-row top-row">
+                        <div class="polaroid polaroid-1">
+                            <img src="VideoCapture_20260123-092649 (1).jpg" alt="Recuerdo 1">
+                        </div>
+                        <div class="polaroid polaroid-2">
+                            <img src="Screenshot_20260615_183501_Gallery.jpg" alt="Recuerdo 2">
+                        </div>
+                        <div class="polaroid polaroid-3">
+                            <img src="IMG-20260418-WA0046.jpg" alt="Recuerdo 3">
+                        </div>
                     </div>
 
-                    <!-- FOTO 4: Arriba Derecha -->
-                    <div class="polaroid polaroid-4">
-                        <img src="Screenshot_20260615_183501_Gallery.jpg" alt="Mica Recuerdo 4">
-                    </div>
-
-                    <!-- FOTO 2: Centro Izquierda -->
-                    <div class="polaroid polaroid-2">
-                        <img src="IMG-20260418-WA0046.jpg" alt="Mica Recuerdo 2">
-                    </div>
-
-                    <!-- FOTO 5: Centro Derecha -->
-                    <div class="polaroid polaroid-5">
-                        <img src="IMG-20260115-WA0050.jpg" alt="Mica Recuerdo 5">
-                    </div>
-
-                    <!-- TARJETA PRINCIPAL -->
                     <div class="birthday-card" id="target-final-card">
                         <svg class="premium-icon" style="color:#cd8b8b; width:30px; height:30px; margin-bottom:15px; fill: rgba(205,139,139,0.06);" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-                        <div class="letter-tag"></div>
                         <div class="letter-body-text">
                             ¡Feliz cumpleaños de nuevo! Espero que te hayan gustado los regalitos, deseo que seas felíz siempre! Gracias por todo.
                         </div>
                         <span class="letter-signature">Te quiero mucho, Rodis.</span>
                     </div>
 
-                    <!-- FOTO 6: Abajo Izquierda -->
-                    <div class="polaroid polaroid-6">
-                        <img src="IMG-20240907-WA0135.jpg" alt="Mica Recuerdo 6">
-                    </div>
-
-                    <!-- FOTO 3: Abajo Derecha -->
-                    <div class="polaroid polaroid-3">
-                        <img src="IMG-20251203-WA0004.jpg" alt="Mica Recuerdo 3">
+                    <div class="photo-row bottom-row">
+                        <div class="polaroid polaroid-4">
+                            <img src="IMG-20260115-WA0050.jpg" alt="Recuerdo 4">
+                        </div>
+                        <div class="polaroid polaroid-5">
+                            <img src="IMG-20240907-WA0135.jpg" alt="Recuerdo 5">
+                        </div>
+                        <div class="polaroid polaroid-6">
+                            <img src="IMG-20251203-WA0004.jpg" alt="Recuerdo 6">
+                        </div>
                     </div>
 
                 </div>
@@ -748,4 +762,3 @@
     </script>
 </body>
 </html>
-
