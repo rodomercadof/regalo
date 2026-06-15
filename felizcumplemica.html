@@ -506,7 +506,7 @@
         <div id="screen-3" class="hidden">
             <div class="letter-scene">
                 <div class="birthday-card animate-card">
-                    <div class="letter-tag">Obsequio Seleccionado</div>
+                    <div class="letter-tag">REGALO</div>
                     <div class="letter-title" id="gift-resolved-name"></div>
                     <div id="cordoba-location-text" class="letter-location-box hidden">
                         <svg class="premium-icon" style="color:#cd8b8b;" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -519,8 +519,8 @@
         </div>
 
         <div id="screen-4" class="hidden">
-            <h1>El secreto continúa...</h1>
-            <div class="subtitle">Ya te conozco y sé que te quedaste con la intriga de qué hay en la otra caja. Como es tu cumpleaños, te invito a que abras el otro regalo también:</div>
+            <h1>Pero...</h1>
+            <div class="subtitle">Ya te conozco y sé que te quedaste con la intriga de saber qué hay en la otra caja. Como es tu cumpleaños, te invito a que abras el otro regalo también:</div>
             
             <div class="zone-3d">
                 <div class="gift-box-anchor hidden" id="anchor-rem-1" onclick="unboxSecondGift(1)">
@@ -546,7 +546,7 @@
         <div id="screen-5" class="hidden">
             <div class="letter-scene">
                 <div class="birthday-card animate-card">
-                    <div class="letter-tag">El Segundo Obsequio</div>
+                    <div class="letter-tag">REGALO</div>
                     <div class="letter-title" id="second-gift-resolved-name"></div>
                     <div id="second-cordoba-text" class="letter-location-box hidden">
                         <svg class="premium-icon" style="color:#cd8b8b;" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -592,7 +592,7 @@
                         <svg class="premium-icon" style="color:#cd8b8b; width:30px; height:30px; margin-bottom:15px; fill: rgba(205,139,139,0.06);" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
                         <div class="letter-tag"></div>
                         <div class="letter-body-text">
-                            ¡Feliz cumpleaños de nuevo! Espero que te haya gustado este juego, y que seas felíz siempre! Gracias por todo.
+                            ¡Feliz cumpleaños de nuevo! Espero que te hayan gustado los regalitos, deseo que seas felíz siempre! Gracias por todo.
                         </div>
                         <span class="letter-signature">Te quiero mucho, Rodis.</span>
                     </div>
@@ -636,7 +636,7 @@
                     giftTitle.innerHTML = "Una pistola masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>💆‍♀️🎁🩷</span>";
                     cordobaBlock.classList.add('hidden');
                 } else {
-                    giftTitle.innerHTML = "Salir a comer a un lugar misterioso <span style='font-size:1.4rem; color:#c5a06b;'>👀✨️🌅</span>";
+                    giftTitle.innerHTML = "Merienda sorpresa <span style='font-size:1.4rem; color:#c5a06b;'>👀✨️🌅</span>";
                     cordobaBlock.classList.remove('hidden'); 
                 }
             }, 750);
@@ -661,7 +661,7 @@
                 const secondCordoba = document.getElementById('second-cordoba-text');
 
                 if (boxId === 2) {
-                    secondTitle.innerHTML = "Salir a comer a un lugar misterioso <span style='font-size:1.4rem; color:#c5a06b;'>👀✨️🌅</span>";
+                    secondTitle.innerHTML = "Merienda sorpresa <span style='font-size:1.4rem; color:#c5a06b;'>👀✨️🌅</span>";
                     secondCordoba.classList.remove('hidden');
                 } else {
                     secondTitle.innerHTML = "Una pistola masajeadora <span style='font-size:1.4rem; color:#c5a06b;'>💆‍♀️🎁🩷</span>";
